@@ -13,6 +13,5 @@ public class LottoConstants {
     public static final int RANDOM_END_NUMBER = 45;
     public static final int RANDOM_NUMBER_COUNT = 6;
 
-    public static final double PERCENTAGE_MULTIPLIER = 1000.0;
-    public static final int ROUNDING_SCALE = -1;
+    public static final double PERCENTAGE_MULTIPLIER = 100.0;
 }
