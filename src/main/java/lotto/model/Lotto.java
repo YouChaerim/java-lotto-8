@@ -34,13 +34,13 @@ public class Lotto {
 
     private void validateRange(List<Integer> numbers) {
         for (int number : numbers) {
-            validateNumberInRange(number); // depth 2
+            validateNumberInRange(number);
         }
     }
 
     private void validateNumberInRange(int number) {
-        if (number < LOTTO_NUMBER_MIN || number > LOTTO_NUMBER_MAX) { // depth 1
-            throw new IllegalArgumentException(LOTTO_NUMBER_INVALID_RANGE); // depth 2
+        if (number < LOTTO_NUMBER_MIN || number > LOTTO_NUMBER_MAX) {
+            throw new IllegalArgumentException(LOTTO_NUMBER_INVALID_RANGE);
         }
     }
 
@@ -51,16 +51,16 @@ public class Lotto {
     public int countMatches(Lotto otherLotto) {
         int count = 0;
         for (int number : numbers) {
-            count += otherLotto.countIfPresent(number); // depth 2
+            count += otherLotto.countIfPresent(number);
         }
         return count;
     }
 
     private int countIfPresent(int number) {
-        if (numbers.contains(number)) { // depth 1
-            return 1; // depth 2
+        if (numbers.contains(number)) {
+            return 1;
         }
-        return 0; // 'else 금지' 규칙 준수
+        return 0;
     }
 
     @Override

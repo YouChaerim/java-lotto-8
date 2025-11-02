@@ -27,13 +27,13 @@ public class PurchaseAmount {
     }
 
     private void validateIsAboveMin(int number) {
-        if (number < MIN_PURCHASE_AMOUNT) { // depth 1
+        if (number < MIN_PURCHASE_AMOUNT) {
             throw new IllegalArgumentException(PURCHASE_LESS_THAN_MINIMUM); // depth 2
         }
     }
 
     private void validateIsDivisibleByUnit(int number) {
-        if (number % PURCHASE_UNIT != 0) { // depth 1
+        if (number % PURCHASE_UNIT != 0) {
             throw new IllegalArgumentException(PURCHASE_NOT_DIVISIBLE_BY_UNIT); // depth 2
         }
     }
