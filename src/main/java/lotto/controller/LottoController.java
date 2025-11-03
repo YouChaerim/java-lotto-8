@@ -38,12 +38,16 @@ public class LottoController {
     private PurchaseAmount askPurchaseAmount() {
         while (true) {
             try {
-                String input = inputView.inputPurchaseAmount();
-                return new PurchaseAmount(input);
+                return getPurchaseAmountFromInput();
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }
         }
+    }
+
+    private PurchaseAmount getPurchaseAmountFromInput() {
+        String input = inputView.inputPurchaseAmount();
+        return new PurchaseAmount(input);
     }
 
     private WinningLotto askWinningLotto() {
@@ -55,25 +59,33 @@ public class LottoController {
     private Lotto askWinningNumbers() {
         while (true) {
             try {
-                String input = inputView.inputWinningNumbers();
-                return new Lotto(parseNumbers(input));
+                return getWinningNumbersFromInput();
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }
         }
     }
 
+    private Lotto getWinningNumbersFromInput() {
+        String input = inputView.inputWinningNumbers();
+        return new Lotto(parseNumbers(input));
+    }
+
     private int askBonusNumber(Lotto winningNumbers) {
         while (true) {
             try {
-                String input = inputView.inputBonusNumber();
-                int bonusNumber = validateBonusNumberString(input);
-                validateBonusNumberDuplication(winningNumbers, bonusNumber);
-                return bonusNumber;
+                return getBonusNumberFromInput(winningNumbers);
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }
         }
+    }
+
+    private int getBonusNumberFromInput(Lotto winningNumbers) {
+        String input = inputView.inputBonusNumber();
+        int bonusNumber = validateBonusNumberString(input);
+        validateBonusNumberDuplication(winningNumbers, bonusNumber);
+        return bonusNumber;
     }
 
     private List<Integer> parseNumbers(String input) {
@@ -110,16 +122,25 @@ public class LottoController {
     }
 
     private Map<LottoRank, Integer> calculateResults(List<Lotto> lottos, WinningLotto winningLotto) {
+        Map<LottoRank, Integer> statistics = initializeStatisticsMap();
+
+        for (Lotto lotto : lottos) {
+            updateStatistics(statistics, lotto, winningLotto);
+        }
+        return statistics;
+    }
+
+    private Map<LottoRank, Integer> initializeStatisticsMap() {
         Map<LottoRank, Integer> statistics = new EnumMap<>(LottoRank.class);
         for (LottoRank rank : LottoRank.values()) {
             statistics.put(rank, 0);
         }
-
-        for (Lotto lotto : lottos) {
-            LottoRank rank = winningLotto.match(lotto);
-            statistics.put(rank, statistics.get(rank) + 1);
-        }
         return statistics;
+    }
+
+    private void updateStatistics(Map<LottoRank, Integer> statistics, Lotto lotto, WinningLotto winningLotto) {
+        LottoRank rank = winningLotto.match(lotto); // depth 1
+        statistics.put(rank, statistics.get(rank) + 1); // depth 1
     }
 
     private void printResults(Map<LottoRank, Integer> statistics, PurchaseAmount purchaseAmount) {
